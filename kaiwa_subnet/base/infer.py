@@ -1,38 +1,64 @@
-
-import threading
-from transformers import pipeline
-import torch
+import subprocess
+import shlex
+import httpx
 
 from communex.module.module import Module, endpoint
+from loguru import logger
+
 
 class InferenceEngine(Module):
+    endpoint = "127.0.0.1"
+    port = "11434"
+
     def __init__(self, model_name: str = "meta-llama/Meta-Llama-3-8B-Instruct") -> None:
         super().__init__()
-        self.model_name = model_name
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "mps")
-        self.pipeline = pipeline("text-generation", model_name, torch_dtype=torch.bfloat16, device_map="auto")
-        self._lock = threading.Lock()
+        self.models = [model_name]
+        self.p = subprocess.Popen(shlex.split("ollama serve"))
+        self.load_models()
 
     @endpoint
-    def chat(
-        self, chat: list, generate_kwargs: dict=None) -> str:
-        if not generate_kwargs:
-            generate_kwargs = dict(
-                temperature = 0.7,
-                max_new_tokens = 512
+    def chat(self, input: dict, timeout: int = 120) -> str:
+        input["stream"] = False
+        with httpx.Client() as client:
+            resp = client.post(
+                f"{self.endpoint}/api/chat",
+                json=input,
+                timeout=timeout,
             )
-        with self._lock:
-            response = self.pipeline(chat,  generate_kwargs=generate_kwargs)
-        return response[0]['generated_text'][-1]['content']
+            resp.raise_for_status()
+            return resp.json()
+
+    def load_models(self):
+        for model_name in self.models:
+            try:
+                logger.info(f"loading model {model_name}")
+                with httpx.stream(
+                    "POST",
+                    f"{self.endpoint}/api/pull",
+                    json={
+                        "model": model_name,
+                        "stream": True,
+                    },
+                    timeout=None,
+                ) as resp:
+                    for line in resp.iter_lines():
+                        logger.info(f"ollama: {line}")
+                    resp.raise_for_status()
+            except httpx.HTTPStatusError as e:
+                logger.error(e)
+                raise
 
     @endpoint
     def get_metadata(self) -> dict:
-        return {"model": self.model_name}
+        return {"models": self.models}
+
 
 if __name__ == "__main__":
     d = InferenceEngine()
-    out = d.chat([
-        {"role": "system", "content": "You are a sassy, wise-cracking robot as imagined by Hollywood circa 1986."},
-        {"role": "user", "content": "Hey, can you tell me any fun things to do in New York?"}
-    ])
+    out = d.chat(
+        {
+            "model": "llama3",
+            "messages": [{"role": "user", "content": "why is the sky blue?"}],
+        }
+    )
     print(out)
