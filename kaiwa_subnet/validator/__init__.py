@@ -4,6 +4,7 @@ from functools import partial
 from collections import deque
 from datetime import datetime
 import threading
+import traceback
 
 from communex._common import get_node_url
 from communex.client import CommuneClient
@@ -16,8 +17,8 @@ from kaiwa_subnet.base import SampleInput, BaseValidator
 from kaiwa_subnet.base.utils import get_netuid
 from kaiwa_subnet.validator._config import ValidatorSettings
 from kaiwa_subnet.validator.dataset import ValidationDataset
-from kaiwa_subnet.validator.model import CLIP
 from kaiwa_subnet.validator.utils import normalize_score, weight_score
+from kaiwa_subnet.base.infer import InferenceEngine
 from communex.module.module import Module, endpoint
 from typing import List
 from pydantic import BaseModel
@@ -38,7 +39,7 @@ class Validator(BaseValidator, Module):
             get_node_url(use_testnet=self.settings.use_testnet)
         )
         self.netuid = get_netuid(self.c_client)
-        self.model = CLIP()
+        self.model = InferenceEngine()
         self.dataset = ValidationDataset()
         self.call_timeout = self.settings.call_timeout
         self.weights_histories = deque(maxlen=10)
@@ -129,13 +130,17 @@ class Validator(BaseValidator, Module):
     def validation_loop(self) -> None:
         settings = self.settings
         while True:
-            start_time = time.time()
-            asyncio.run(self.validate_step())
-            elapsed = time.time() - start_time
-            if elapsed < settings.iteration_interval:
-                sleep_time = settings.iteration_interval - elapsed
-                logger.info(f"Sleeping for {sleep_time}")
-                time.sleep(sleep_time)
+            try:
+                logger.info(f"run validation loop")
+                start_time = time.time()
+                asyncio.run(self.validate_step())
+                elapsed = time.time() - start_time
+                if elapsed < settings.iteration_interval:
+                    sleep_time = settings.iteration_interval - elapsed
+                    logger.info(f"Sleeping for {sleep_time}")
+                    time.sleep(sleep_time)
+            except Exception as e:
+                print(traceback.format_exc())
 
     def start_validation_loop(self):
         logger.info("start sync loop")

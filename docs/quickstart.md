@@ -56,7 +56,7 @@ docker run --gpus=all -d --network host --restart always \
 -v $HOME/.commune:/root/.commune \
 -v $HOME/.cache/huggingface:/root/.cache/huggingface \
 --name kaiwa-validator \
-mos4ic/kaiwa-subnet:latest \
+kaiwadev/kaiwa-subnet:latest \
 python kaiwa_subnet/cli.py [--testnet] [--log-level=INFO] validator <your_commune_key>
 ```
 host should be 0.0.0.0 so it allows all the incoming requests with other ip and for the local testing use 127.0.0.1

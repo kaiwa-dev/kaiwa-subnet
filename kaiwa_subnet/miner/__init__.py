@@ -8,15 +8,15 @@ from communex.key import generate_keypair
 from communex.compat.key import classic_load_key
 from communex._common import get_node_url
 
-from kaiwa_subnet.miner.model import DiffUsers
 from kaiwa_subnet.miner._config import MinerSettings
 from kaiwa_subnet.base.utils import get_netuid
+from kaiwa_subnet.base.infer import InferenceEngine
 import sys
 
 from loguru import logger
 
 
-class Miner(DiffUsers):
+class Miner(InferenceEngine):
     def __init__(self, key: Keypair, settings: MinerSettings = None) -> None:
         super().__init__()
         self.settings = settings or MinerSettings()

@@ -3,20 +3,17 @@ from io import BytesIO
 from typing import Optional
 import base64
 import threading
-
+import vllm
 import torch
-from diffusers import AutoPipelineForText2Image
 
 from communex.module.module import Module, endpoint
 
-class DiffUsers(Module):
+class InferenceEngine(Module):
     def __init__(self, model_name: str = "stabilityai/sdxl-turbo") -> None:
         super().__init__()
         self.model_name = model_name
         self.device = torch.device("cuda" if torch.cuda.is_available() else "mps")
-        self.pipeline = AutoPipelineForText2Image.from_pretrained(
-            model_name, torch_dtype=torch.float16, variant="fp16"
-        ).to(self.device)
+
         self._lock = threading.Lock()
 
     @endpoint
@@ -45,7 +42,7 @@ class DiffUsers(Module):
         return {"model": self.model_name}
 
 if __name__ == "__main__":
-    d = DiffUsers()
+    d = InferenceEngine()
     out = d.sample(prompt="cat, jumping")
     with open("a.png", "wb") as f:
         f.write(out)

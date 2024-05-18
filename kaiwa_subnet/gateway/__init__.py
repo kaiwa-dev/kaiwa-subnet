@@ -15,7 +15,6 @@ from communex.client import CommuneClient
 from communex.compat.key import classic_load_key
 from communex.module.client import ModuleClient
 from communex.types import Ss58Address
-from diffusers import StableDiffusionXLImg2ImgPipeline
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
@@ -24,7 +23,6 @@ from substrateinterface import Keypair
 from transformers import pipeline, set_seed
 
 from kaiwa_subnet.base import BaseValidator, SampleInput
-from kaiwa_subnet.base.model import MagicPromptReq
 from kaiwa_subnet.base.utils import (
     get_netuid,
 )
@@ -54,12 +52,6 @@ class Gateway(BaseValidator):
         self.top_miners = {}
         self.validators: dict[int, tuple[list[str], Ss58Address]] = {}
         self.device = torch.device("cuda" if torch.cuda.is_available() else "mps")
-        self.pipe = StableDiffusionXLImg2ImgPipeline.from_pretrained(
-            "stabilityai/stable-diffusion-xl-refiner-1.0",
-            torch_dtype=torch.float16,
-            variant="fp16",
-            use_safetensors=True
-        ).to(self.device)
 
         self.sync()
 
@@ -114,29 +106,6 @@ class Gateway(BaseValidator):
         for uid, response in zip(self.validators.keys(), validator_answers):
             rv.append({"uid": uid, "weights_history": response})
         return rv
-
-
-magic_prompt_pipe = pipeline('text-generation', model='Gustavosta/MagicPrompt-Stable-Diffusion', tokenizer='gpt2')
-
-
-@app.post("/magic_prompt")
-async def magic_prompt(req: MagicPromptReq):
-    prompt = req.prompt.replace("\n", "").lower().capitalize()
-    prompt = re.sub(r"[,:\-–.!;?_]", '', prompt)
-    generated_text = prompt
-
-    for count in range(5):
-        seed = random.randint(100, 1000000)
-        set_seed(seed)
-
-        response = magic_prompt_pipe(prompt, pad_token_id=50256, max_length=77, truncation=True)[0]
-        generated_text = response['generated_text'].strip()
-        if len(generated_text) > (len(prompt) + 8):
-            if generated_text.endswith((":", "-", "—")) is False:
-                generated_text = re.sub(r'[^ ]+\.[^ ]+', '', generated_text).replace("<", "").replace(">", "")
-            break
-
-    return {"text": generated_text}
 
 
 @app.post(
