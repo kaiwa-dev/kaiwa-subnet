@@ -40,7 +40,7 @@ class Validator(BaseValidator, Module):
         )
         self.netuid = get_netuid(self.c_client)
         self.model = InferenceEngine()
-        # self.dataset = ValidationDataset()
+        self.dataset = ValidationDataset()
         self.call_timeout = self.settings.call_timeout
         self.weights_histories = deque(maxlen=10)
 
@@ -127,11 +127,7 @@ class Validator(BaseValidator, Module):
     def get_validate_input(self):
         return ChatInput(
             model="llama3",
-            messages=[{"role": "user", "content": "why is the sky blue?"}],
-        )
-        return ChatInput(
-            prompt=self.dataset.random_prompt(),
-            steps=4,
+            messages=[{"role": "user", "content": self.dataset.random_prompt()}],
         )
 
     def validation_loop(self) -> None:
