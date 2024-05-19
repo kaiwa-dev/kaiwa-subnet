@@ -3,7 +3,7 @@ import base64
 import heapq
 import time
 from operator import itemgetter
-from typing import Optional
+from typing import Optional, List
 
 from communex.misc import get_map_modules
 from communex.module.client import ModuleClient
@@ -14,10 +14,14 @@ from pydantic import BaseModel
 from .utils import get_ip_port, extract_address
 
 
+class Message:
+    role: str
+    content: str
+
+
 class ChatInput(BaseModel):
     model: str
-    messages: list
-
+    messages: List[Message]
 
 
 class BaseValidator:
