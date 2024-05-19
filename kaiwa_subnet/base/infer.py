@@ -1,23 +1,23 @@
 import subprocess
 import shlex
 import httpx
+import time
 
 from communex.module.module import Module, endpoint
 from loguru import logger
 
 
 class InferenceEngine(Module):
-    endpoint = "127.0.0.1"
-    port = "11434"
-
-    def __init__(self, model_name: str = "meta-llama/Meta-Llama-3-8B-Instruct") -> None:
+    def __init__(self, models: list[str] = ["llama3"]) -> None:
         super().__init__()
-        self.models = [model_name]
+        self.models = models
+        self.endpoint = "http://127.0.0.1:11434"
         self.p = subprocess.Popen(shlex.split("ollama serve"))
+        time.sleep(10)
         self.load_models()
 
     @endpoint
-    def chat(self, input: dict, timeout: int = 120) -> str:
+    def chat(self, input: dict, timeout: int = 120) -> dict:
         input["stream"] = False
         with httpx.Client() as client:
             resp = client.post(

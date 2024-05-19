@@ -1,8 +1,7 @@
-from kaiwa_subnet.base.config import kaiwaBaseSettings
+from kaiwa_subnet.base.config import KaiwaBaseSettings
 from typing import List
 
 
-class MinerSettings(kaiwaBaseSettings):
+class MinerSettings(KaiwaBaseSettings):
     host: str
     port: int
-    model: str = "stabilityai/sdxl-turbo"

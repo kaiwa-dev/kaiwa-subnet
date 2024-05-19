@@ -14,11 +14,10 @@ from pydantic import BaseModel
 from .utils import get_ip_port, extract_address
 
 
-class SampleInput(BaseModel):
-    prompt: str
-    negative_prompt: str = ""
-    steps: int = 1
-    seed: Optional[int] = None
+class ChatInput(BaseModel):
+    model: str
+    messages: list
+
 
 
 class BaseValidator:
@@ -26,9 +25,9 @@ class BaseValidator:
         self.call_timeout = 60
 
     def get_miner_generation(
-            self,
-            miner_info: tuple[list[str], Ss58Address],
-            input: SampleInput,
+        self,
+        miner_info: tuple[list[str], Ss58Address],
+        input: ChatInput,
     ) -> Optional[bytes]:
         try:
             connection, miner_key = miner_info
@@ -37,7 +36,7 @@ class BaseValidator:
             client = ModuleClient(host=module_ip, port=int(module_port), key=self.key)
             result = asyncio.run(
                 client.call(
-                    fn="sample",
+                    fn="chat",
                     target_key=miner_key,
                     params=input.model_dump(),
                     timeout=self.call_timeout,
@@ -49,9 +48,9 @@ class BaseValidator:
             return None
 
     async def get_miner_generation_async(
-            self,
-            miner_info: tuple[list[str], Ss58Address],
-            input: SampleInput,
+        self,
+        miner_info: tuple[list[str], Ss58Address],
+        input: ChatInput,
     ) -> Optional[bytes]:
         try:
             connection, miner_key = miner_info
@@ -59,7 +58,7 @@ class BaseValidator:
             logger.debug(f"Call {miner_key} - {module_ip}:{module_port}")
             client = ModuleClient(host=module_ip, port=int(module_port), key=self.key)
             result = await client.call(
-                fn="sample",
+                fn="chat",
                 target_key=miner_key,
                 params=input.model_dump(),
                 timeout=self.call_timeout,
@@ -70,13 +69,15 @@ class BaseValidator:
             return None
 
     async def get_miner_generation_with_elapsed(
-            self,
-            miner_info: tuple[list[str], Ss58Address],
-            input: SampleInput,
+        self,
+        miner_info: tuple[list[str], Ss58Address],
+        input: ChatInput,
     ) -> tuple[Optional[bytes], float]:
         start = time.time()
         try:
-            result = await self.get_miner_generation_async(miner_info=miner_info, input=input)
+            result = await self.get_miner_generation_async(
+                miner_info=miner_info, input=input
+            )
         except Exception:
             return None, 99999
         elapsed = time.time() - start

@@ -1,15 +1,10 @@
 import asyncio
-import base64
 import concurrent.futures
 import random
-import re
 import threading
 import time
-from io import BytesIO
 
-import torch
 import uvicorn
-from PIL import Image
 from communex._common import get_node_url
 from communex.client import CommuneClient
 from communex.compat.key import classic_load_key
@@ -20,9 +15,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from loguru import logger
 from substrateinterface import Keypair
-from transformers import pipeline, set_seed
 
-from kaiwa_subnet.base import BaseValidator, SampleInput
+from kaiwa_subnet.base import BaseValidator, ChatInput
 from kaiwa_subnet.base.utils import (
     get_netuid,
 )
@@ -51,7 +45,6 @@ class Gateway(BaseValidator):
         self.call_timeout = self.settings.call_timeout
         self.top_miners = {}
         self.validators: dict[int, tuple[list[str], Ss58Address]] = {}
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "mps")
 
         self.sync()
 
@@ -109,11 +102,10 @@ class Gateway(BaseValidator):
 
 
 @app.post(
-    "/generate",
-    responses={200: {"content": {"image/png": {}}}},
+    "/chat",
     response_class=Response,
 )
-async def generate_image(req: SampleInput):
+async def generate_image(req: ChatInput):
     top_miners = list(app.m.get_top_miners().values())
     top_miners = random.sample(top_miners, 5)
     tasks = [
@@ -122,11 +114,9 @@ async def generate_image(req: SampleInput):
     for future in asyncio.as_completed(tasks):
         result = await future
         if result:
-            result = app.m.pipe(prompt=req.prompt, width=512, height=512, image=Image.open(BytesIO(result))).images[0]
-            buffered = BytesIO()
-            result.save(buffered, format="PNG")
-            return Response(content=buffered.getvalue(), media_type="image/png")
-    return Response(content=b"", media_type="image/png")
+            print(result)
+            return Response()
+    return Response()
 
 
 @app.get("/weights")

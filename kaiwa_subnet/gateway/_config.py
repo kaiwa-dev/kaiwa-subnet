@@ -1,7 +1,7 @@
-from kaiwa_subnet.base.config import kaiwaBaseSettings
+from kaiwa_subnet.base.config import KaiwaBaseSettings
 from typing import List
 
 
-class GatewaySettings(kaiwaBaseSettings):
+class GatewaySettings(KaiwaBaseSettings):
     host: str
     port: int

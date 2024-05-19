@@ -13,7 +13,7 @@ from communex.module.module import Module
 from loguru import logger
 from substrateinterface import Keypair
 
-from kaiwa_subnet.base import SampleInput, BaseValidator
+from kaiwa_subnet.base import ChatInput, BaseValidator
 from kaiwa_subnet.base.utils import get_netuid
 from kaiwa_subnet.validator._config import ValidatorSettings
 from kaiwa_subnet.validator.dataset import ValidationDataset
@@ -40,16 +40,18 @@ class Validator(BaseValidator, Module):
         )
         self.netuid = get_netuid(self.c_client)
         self.model = InferenceEngine()
-        self.dataset = ValidationDataset()
+        # self.dataset = ValidationDataset()
         self.call_timeout = self.settings.call_timeout
         self.weights_histories = deque(maxlen=10)
 
-    def calculate_score(self, img: bytes, prompt: str):
+    def calculate_score(self, miner_answer: dict, vali_answer: dict):
         try:
-            return self.model.get_similarity(img, prompt)
-        except Exception:
-            return 0
-
+            if miner_answer["message"]["content"] == vali_answer["message"]["content"]:
+                return 1
+        except Exception as e:
+            print(e)
+        return 0
+    
     async def validate_step(self):
         self.c_client = CommuneClient(
             get_node_url(use_testnet=self.settings.use_testnet)
@@ -69,12 +71,13 @@ class Validator(BaseValidator, Module):
             )
             futures.append(future)
         miner_answers = await asyncio.gather(*futures)
+        vali_answer = self.model.chat(input=input)
         for uid, miner_response in zip(modules_info.keys(), miner_answers):
             miner_answer, elapsed = miner_response
             if not miner_answer:
                 logger.debug(f"Skipping miner {uid}: no answer")
                 continue
-            score = self.calculate_score(miner_answer, input.prompt)
+            score = self.calculate_score(miner_answer, vali_answer)
             if score == 0:
                 logger.debug(f"Skipping miner {uid}: score is 0")
                 continue
@@ -122,7 +125,11 @@ class Validator(BaseValidator, Module):
             logger.error(e)
 
     def get_validate_input(self):
-        return SampleInput(
+        return ChatInput(
+            model="llama3",
+            messages=[{"role": "user", "content": "why is the sky blue?"}],
+        )
+        return ChatInput(
             prompt=self.dataset.random_prompt(),
             steps=4,
         )
