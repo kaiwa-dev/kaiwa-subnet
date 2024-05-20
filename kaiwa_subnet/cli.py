@@ -66,7 +66,7 @@ def validator(
         call_timeout=call_timeout,
         host=host,
         port=port,
-        models=models,
+        models=models.split(","),
     )
     validator = Validator(key=classic_load_key(commune_key), settings=settings)
     validator.serve()
@@ -98,7 +98,7 @@ def miner(
         use_testnet=ctx.obj.use_testnet,
         host=host,
         port=port,
-        models=models,
+        models=models.split(","),
     )
     miner = Miner(key=classic_load_key(commune_key), settings=settings)
     miner.serve()

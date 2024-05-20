@@ -232,13 +232,13 @@ test = ["dateparser (==1.*)", "pre-commit", "pytest", "pytest-cov", "pytest-mock
 
 [[package]]
 name = "astroid"
-version = "3.2.1"
+version = "3.2.2"
 description = "An abstract syntax tree for Python with inference support."
 optional = false
 python-versions = ">=3.8.0"
 files = [
-    {file = "astroid-3.2.1-py3-none-any.whl", hash = "sha256:b452064132234819f023b94f4bd045b250ea0009f372b4377cfcd87f10806ca5"},
-    {file = "astroid-3.2.1.tar.gz", hash = "sha256:902564b36796ba1eab3ad2c7a694861fbd926f574d5dbb5fa1d86778a2ba2d91"},
+    {file = "astroid-3.2.2-py3-none-any.whl", hash = "sha256:e8a0083b4bb28fcffb6207a3bfc9e5d0a68be951dd7e336d5dcf639c682388c0"},
+    {file = "astroid-3.2.2.tar.gz", hash = "sha256:8ead48e31b92b2e217b6c9733a21afafe479d52d6e164dd25fb1a770c7c3cf94"},
 ]
 
 [package.dependencies]
@@ -591,13 +591,13 @@ test = ["pytest"]
 
 [[package]]
 name = "communex"
-version = "0.1.25.1"
+version = "0.1.27.1"
 description = "A library for Commune network focused on simplicity"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "communex-0.1.25.1-py3-none-any.whl", hash = "sha256:830b434a07939d847f5f74059a34d8e95791ec3b16f3fb4b8061a187109d8a41"},
-    {file = "communex-0.1.25.1.tar.gz", hash = "sha256:c1a8fd94ccad4ed5bf646ddeabc16fd1cc59b26d9331eae202165476e26e4f33"},
+    {file = "communex-0.1.27.1-py3-none-any.whl", hash = "sha256:74ae040a63574a72c1472e8debce2f5fdaca644eda7625c3723bbb88aff8cc06"},
+    {file = "communex-0.1.27.1.tar.gz", hash = "sha256:816253e8209d124bada273f97463771723917a8eebb70b8ca0b70e497c837970"},
 ]
 
 [package.dependencies]
@@ -2831,17 +2831,17 @@ windows-terminal = ["colorama (>=0.4.6)"]
 
 [[package]]
 name = "pylint"
-version = "3.2.0"
+version = "3.2.2"
 description = "python code static checker"
 optional = false
 python-versions = ">=3.8.0"
 files = [
-    {file = "pylint-3.2.0-py3-none-any.whl", hash = "sha256:9f20c05398520474dac03d7abb21ab93181f91d4c110e1e0b32bc0d016c34fa4"},
-    {file = "pylint-3.2.0.tar.gz", hash = "sha256:ad8baf17c8ea5502f23ae38d7c1b7ec78bd865ce34af9a0b986282e2611a8ff2"},
+    {file = "pylint-3.2.2-py3-none-any.whl", hash = "sha256:3f8788ab20bb8383e06dd2233e50f8e08949cfd9574804564803441a4946eab4"},
+    {file = "pylint-3.2.2.tar.gz", hash = "sha256:d068ca1dfd735fb92a07d33cb8f288adc0f6bc1287a139ca2425366f7cbe38f8"},
 ]
 
 [package.dependencies]
-astroid = ">=3.2.0,<=3.3.0-dev0"
+astroid = ">=3.2.2,<=3.3.0-dev0"
 colorama = {version = ">=0.4.5", markers = "sys_platform == \"win32\""}
 dill = [
     {version = ">=0.2", markers = "python_version < \"3.11\""},
@@ -4026,4 +4026,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "49bcfc4dc41d7847c10858283f014d02f89feba551f91142a48b6ffab3c0457f"
+content-hash = "dc12b76618a44b3dfc05540ed0c109909218823ed1395e818a2c321e2df997f1"

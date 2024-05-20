@@ -10,19 +10,8 @@ from communex.module.client import ModuleClient
 from communex.types import Ss58Address
 from loguru import logger
 from pydantic import BaseModel
-
+from .schema import ChatInput
 from .utils import get_ip_port, extract_address
-
-
-class Message:
-    role: str
-    content: str
-
-
-class ChatInput(BaseModel):
-    model: str
-    messages: List[Message]
-
 
 class BaseValidator:
     def __init__(self):

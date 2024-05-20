@@ -105,7 +105,7 @@ class Gateway(BaseValidator):
     "/chat",
     response_class=Response,
 )
-async def generate_image(req: ChatInput):
+async def chat(req: ChatInput):
     top_miners = list(app.m.get_top_miners().values())
     top_miners = random.sample(top_miners, 5)
     tasks = [

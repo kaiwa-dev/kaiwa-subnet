@@ -6,6 +6,8 @@ import time
 from communex.module.module import Module, endpoint
 from loguru import logger
 
+from .schema import ChatInput
+
 
 class InferenceEngine(Module):
     def __init__(self, models: list[str] = ["llama3"]) -> None:
@@ -17,12 +19,13 @@ class InferenceEngine(Module):
         self.load_models()
 
     @endpoint
-    def chat(self, input: dict, timeout: int = 120) -> dict:
-        input["stream"] = False
+    def chat(self, input: ChatInput, timeout: int = 120) -> dict:
+        input_dict = input.model_dump()
+        input_dict["stream"] = False
         with httpx.Client() as client:
             resp = client.post(
                 f"{self.endpoint}/api/chat",
-                json=input,
+                json=input_dict,
                 timeout=timeout,
             )
             resp.raise_for_status()
