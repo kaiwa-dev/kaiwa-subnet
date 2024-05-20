@@ -30,7 +30,9 @@ class Miner(InferenceEngine):
         from communex.module.server import ModuleServer
         import uvicorn
 
-        server = ModuleServer(self, self.key, subnets_whitelist=[self.netuid])
+        server = ModuleServer(
+            self, self.key, subnets_whitelist=None
+        )  # FIXME: [self.netuid]
         app = server.get_fastapi_app()
         uvicorn.run(app, host=self.settings.host, port=self.settings.port)
 
@@ -41,4 +43,4 @@ if __name__ == "__main__":
         port=7777,
         use_testnet=True,
     )
-    Miner(key=classic_load_key("kaiwa-miner0"), settings=settings).serve()
+    Miner(key=classic_load_key("miner"), settings=settings).serve()

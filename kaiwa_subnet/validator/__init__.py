@@ -13,7 +13,7 @@ from communex.module.module import Module
 from loguru import logger
 from substrateinterface import Keypair
 
-from kaiwa_subnet.base import ChatInput, BaseValidator
+from kaiwa_subnet.base import BaseValidator
 from kaiwa_subnet.base.utils import get_netuid
 from kaiwa_subnet.validator._config import ValidatorSettings
 from kaiwa_subnet.validator.dataset import ValidationDataset
@@ -45,13 +45,14 @@ class Validator(BaseValidator, Module):
         self.weights_histories = deque(maxlen=10)
 
     def calculate_score(self, miner_answer: dict, vali_answer: dict):
+        logger.debug(f"miner answer: {miner_answer} vali_answer: {vali_answer}")
         try:
             if miner_answer["message"]["content"] == vali_answer["message"]["content"]:
                 return 1
         except Exception as e:
             print(e)
         return 0
-    
+
     async def validate_step(self):
         self.c_client = CommuneClient(
             get_node_url(use_testnet=self.settings.use_testnet)
@@ -124,11 +125,12 @@ class Validator(BaseValidator, Module):
         except Exception as e:
             logger.error(e)
 
-    def get_validate_input(self):
-        return ChatInput(
-            model="llama3",
-            messages=[{"role": "user", "content": self.dataset.random_prompt()}],
-        )
+    def get_validate_input(self) -> dict:
+        return {
+            "model": "llama3",
+            "messages": [{"role": "user", "content": self.dataset.random_prompt()}],
+            "options": {"temperature": 0, "seed": 0},
+        }
 
     def validation_loop(self) -> None:
         settings = self.settings
@@ -172,4 +174,4 @@ class Validator(BaseValidator, Module):
 
 if __name__ == "__main__":
     settings = ValidatorSettings(use_testnet=True)
-    Validator(key=classic_load_key("kaiwa-validator0"), settings=settings).serve()
+    Validator(key=classic_load_key("validator"), settings=settings).serve()

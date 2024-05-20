@@ -16,7 +16,7 @@ from fastapi.responses import Response
 from loguru import logger
 from substrateinterface import Keypair
 
-from kaiwa_subnet.base import BaseValidator, ChatInput
+from kaiwa_subnet.base import BaseValidator
 from kaiwa_subnet.base.utils import (
     get_netuid,
 )
@@ -105,7 +105,7 @@ class Gateway(BaseValidator):
     "/chat",
     response_class=Response,
 )
-async def chat(req: ChatInput):
+async def chat(req: dict):
     top_miners = list(app.m.get_top_miners().values())
     top_miners = random.sample(top_miners, 5)
     tasks = [
@@ -130,6 +130,6 @@ if __name__ == "__main__":
         port=9009,
         use_testnet=True,
     )
-    app.m = Gateway(key=classic_load_key("kaiwa-validator0"), settings=settings)
+    app.m = Gateway(key=classic_load_key("kaiwa-validator"), settings=settings)
     app.m.start_sync_loop()
     uvicorn.run(app=app, host=settings.host, port=settings.port)

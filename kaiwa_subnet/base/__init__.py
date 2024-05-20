@@ -9,9 +9,8 @@ from communex.misc import get_map_modules
 from communex.module.client import ModuleClient
 from communex.types import Ss58Address
 from loguru import logger
-from pydantic import BaseModel
-from .schema import ChatInput
 from .utils import get_ip_port, extract_address
+
 
 class BaseValidator:
     def __init__(self):
@@ -20,7 +19,7 @@ class BaseValidator:
     def get_miner_generation(
         self,
         miner_info: tuple[list[str], Ss58Address],
-        input: ChatInput,
+        input: dict,
     ) -> Optional[bytes]:
         try:
             connection, miner_key = miner_info
@@ -31,11 +30,11 @@ class BaseValidator:
                 client.call(
                     fn="chat",
                     target_key=miner_key,
-                    params=input.model_dump(),
+                    params={"input": input},
                     timeout=self.call_timeout,
                 )
             )
-            return base64.b64decode(result)
+            return result
         except Exception as e:
             logger.debug(f"Call error: {e}")
             return None
@@ -43,7 +42,7 @@ class BaseValidator:
     async def get_miner_generation_async(
         self,
         miner_info: tuple[list[str], Ss58Address],
-        input: ChatInput,
+        input: dict,
     ) -> Optional[bytes]:
         try:
             connection, miner_key = miner_info
@@ -53,10 +52,10 @@ class BaseValidator:
             result = await client.call(
                 fn="chat",
                 target_key=miner_key,
-                params=input.model_dump(),
+                params={"input": input},
                 timeout=self.call_timeout,
             )
-            return base64.b64decode(result)
+            return result
         except Exception as e:
             logger.debug(f"Call error: {e}")
             return None
@@ -64,7 +63,7 @@ class BaseValidator:
     async def get_miner_generation_with_elapsed(
         self,
         miner_info: tuple[list[str], Ss58Address],
-        input: ChatInput,
+        input: dict,
     ) -> tuple[Optional[bytes], float]:
         start = time.time()
         try:
