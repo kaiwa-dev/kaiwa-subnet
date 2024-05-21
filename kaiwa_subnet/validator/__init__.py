@@ -129,7 +129,7 @@ class Validator(BaseValidator, Module):
         return {
             "model": "llama3",
             "messages": [{"role": "user", "content": self.dataset.random_prompt()}],
-            "options": {"temperature": 0, "seed": 0},
+            "options": {"temperature": 0, "seed": 100},
         }
 
     def validation_loop(self) -> None:
