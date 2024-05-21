@@ -12,7 +12,7 @@ from communex.module.client import ModuleClient
 from communex.types import Ss58Address
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
+from fastapi.responses import Response, JSONResponse
 from loguru import logger
 from substrateinterface import Keypair
 
@@ -103,19 +103,18 @@ class Gateway(BaseValidator):
 
 @app.post(
     "/chat",
-    response_class=Response,
 )
 async def chat(req: dict):
     top_miners = list(app.m.get_top_miners().values())
-    top_miners = random.sample(top_miners, 5)
+    top_miners = random.sample(top_miners, min(len(top_miners), 5))
     tasks = [
         app.m.get_miner_generation_async(miner_info, req) for miner_info in top_miners
     ]
     for future in asyncio.as_completed(tasks):
         result = await future
         if result:
-            print(result)
-            return Response()
+            logger.debug(result)
+            return result
     return Response()
 
 
