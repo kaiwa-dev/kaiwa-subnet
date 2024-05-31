@@ -591,13 +591,13 @@ test = ["pytest"]
 
 [[package]]
 name = "communex"
-version = "0.1.28.2"
+version = "0.1.29.1"
 description = "A library for Commune network focused on simplicity"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "communex-0.1.28.2-py3-none-any.whl", hash = "sha256:29d5c3e527b49dfcc19f300be3182f439159fb7360dae654c7de28b6dd58998c"},
-    {file = "communex-0.1.28.2.tar.gz", hash = "sha256:983c4aeb883f02d8d80987df193812cd81f16880d4e1836cdde6992f44dcf222"},
+    {file = "communex-0.1.29.1-py3-none-any.whl", hash = "sha256:73ae67928ca35a7b06bd93fdc2b15f0454fb6a8d497acdc21f2f1648d26906c6"},
+    {file = "communex-0.1.29.1.tar.gz", hash = "sha256:abc0edef42379ca38da8e9a6f801451386edd82b1488f7bd04db57661a4ca5e4"},
 ]
 
 [package.dependencies]
