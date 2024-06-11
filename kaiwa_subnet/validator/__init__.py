@@ -19,6 +19,7 @@ from kaiwa_subnet.validator._config import ValidatorSettings
 from kaiwa_subnet.validator.dataset import ValidationDataset
 from kaiwa_subnet.validator.utils import normalize_score, weight_score
 from kaiwa_subnet.base.infer import InferenceEngine
+from kaiwa_subnet.base.schema import ChatCompletionRequest
 from communex.module.module import Module, endpoint
 from typing import List
 from pydantic import BaseModel
@@ -123,12 +124,13 @@ class Validator(BaseValidator, Module):
         except Exception as e:
             logger.error(e)
 
-    def get_validate_input(self) -> dict:
-        return {
-            "model": "llama3",
-            "messages": [{"role": "user", "content": self.dataset.random_prompt()}],
-            "options": {"temperature": 0, "seed": 100},
-        }
+    def get_validate_input(self) -> ChatCompletionRequest:
+        return ChatCompletionRequest(
+            model=self.model,
+            messages=[{"role": "user", "content": self.dataset.random_prompt()}],
+            seed=100,
+            temperature=0,
+        )
 
     def validation_loop(self) -> None:
         settings = self.settings

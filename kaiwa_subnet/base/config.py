@@ -3,9 +3,10 @@ from typing import List
 
 
 class KaiwaBaseSettings(BaseSettings):
+    model: str = "NousResearch/Meta-Llama-3-8B-Instruct"
+
     use_testnet: bool = False
     call_timeout: int = 60
-    models: list[str] = ["llama3"]
 
     # TODO: whitelist&blacklist
     # whitelist: List[str] = []

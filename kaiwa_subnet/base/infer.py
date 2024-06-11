@@ -2,54 +2,55 @@ import subprocess
 import shlex
 import httpx
 import time
+import asyncio
 
 from communex.module.module import Module, endpoint
 from loguru import logger
 
+from starlette.responses import StreamingResponse, JSONResponse
+
+from vllm.engine.arg_utils import AsyncEngineArgs
+from vllm.engine.async_llm_engine import AsyncLLMEngine
+from vllm.entrypoints.openai.cli_args import make_arg_parser
+from vllm.entrypoints.openai.protocol import (
+    ChatCompletionRequest,
+    ChatCompletionResponse,
+    ErrorResponse,
+)
+from vllm.entrypoints.openai.serving_chat import OpenAIServingChat
+from vllm.entrypoints.openai.serving_engine import LoRAModulePath
+
 
 class InferenceEngine(Module):
-    def __init__(self, models: list[str] = ["llama3"]) -> None:
+    def __init__(self, model: str = "NousResearch/Meta-Llama-3-8B-Instruct") -> None:
         super().__init__()
-        self.models = models
-        self.endpoint = "http://127.0.0.1:11434"
-        self.p = subprocess.Popen(shlex.split("ollama serve"))
-        time.sleep(10)
-        self.load_models()
+        engine_args = AsyncEngineArgs(
+            model=model,
+            enforce_eager=True,
+            max_model_len=2048,
+            quantization="fp8",
+        )
+        self.engine = AsyncLLMEngine.from_engine_args(engine_args)
+        model_config = asyncio.run(self.engine.get_model_config())
+        served_model_names = [engine_args.model]
+        response_role = ""
+        lora_modules = None
+        chat_template = None
+        self.openai_serving_chat = OpenAIServingChat(
+            self.engine,
+            model_config,
+            served_model_names,
+            response_role,
+            lora_modules,
+            chat_template,
+        )
 
     @endpoint
-    def chat(self, input: dict, timeout: int = 120) -> dict:
-        input["stream"] = False
-        logger.debug(f"input: {input}")
-        with httpx.Client() as client:
-            resp = client.post(
-                f"{self.endpoint}/api/chat",
-                json=input,
-                timeout=timeout,
-            )
-            resp.raise_for_status()
-            rv = resp.json()
-            logger.debug(f"result: {rv}")
-            return rv
-
-    def load_models(self):
-        for model_name in self.models:
-            try:
-                logger.info(f"loading model {model_name}")
-                with httpx.stream(
-                    "POST",
-                    f"{self.endpoint}/api/pull",
-                    json={
-                        "model": model_name,
-                        "stream": True,
-                    },
-                    timeout=None,
-                ) as resp:
-                    for line in resp.iter_lines():
-                        logger.info(f"ollama: {line}")
-                    resp.raise_for_status()
-            except httpx.HTTPStatusError as e:
-                logger.error(e)
-                raise
+    def chat(
+        self, request: ChatCompletionRequest, timeout: int = 120
+    ) -> ChatCompletionResponse:
+        resp = asyncio.run(self.openai_serving_chat.create_chat_completion(request))
+        return resp
 
     @endpoint
     def get_metadata(self) -> dict:
@@ -59,9 +60,9 @@ class InferenceEngine(Module):
 if __name__ == "__main__":
     d = InferenceEngine()
     out = d.chat(
-        {
-            "model": "llama3",
-            "messages": [{"role": "user", "content": "why is the sky blue?"}],
-        }
+        request=ChatCompletionRequest(
+            model="NousResearch/Meta-Llama-3-8B-Instruct",
+            messages=[{"role": "user", "content": "Hello!"}],
+        )
     )
     print(out)

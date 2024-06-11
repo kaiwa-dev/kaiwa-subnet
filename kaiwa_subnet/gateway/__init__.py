@@ -20,6 +20,7 @@ from kaiwa_subnet.base import BaseValidator
 from kaiwa_subnet.base.utils import (
     get_netuid,
 )
+from kaiwa_subnet.base.schema import ChatCompletionRequest
 from kaiwa_subnet.gateway._config import GatewaySettings
 
 app = FastAPI()
@@ -104,7 +105,7 @@ class Gateway(BaseValidator):
 @app.post(
     "/chat",
 )
-async def chat(req: dict):
+async def chat(req: ChatCompletionRequest):
     top_miners = list(app.m.get_top_miners().values())
     top_miners = random.sample(top_miners, min(len(top_miners), 5))
     tasks = [
