@@ -10,6 +10,7 @@ from communex.module.client import ModuleClient
 from communex.types import Ss58Address
 from loguru import logger
 from .utils import get_ip_port, extract_address
+from .schema import ChatCompletionRequest
 
 
 class BaseValidator:
@@ -19,7 +20,7 @@ class BaseValidator:
     def get_miner_generation(
         self,
         miner_info: tuple[list[str], Ss58Address],
-        input: dict,
+        input: ChatCompletionRequest,
     ) -> Optional[bytes]:
         try:
             connection, miner_key = miner_info
@@ -30,7 +31,7 @@ class BaseValidator:
                 client.call(
                     fn="chat",
                     target_key=miner_key,
-                    params={"input": input},
+                    params={"input": input.model_dump()},
                     timeout=self.call_timeout,
                 )
             )

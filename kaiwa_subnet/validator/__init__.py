@@ -49,7 +49,7 @@ class Validator(BaseValidator, Module):
     def calculate_score(self, miner_answer: dict, vali_answer: dict):
         logger.debug(f"miner answer: {miner_answer} vali_answer: {vali_answer}")
         try:
-            if miner_answer["message"]["content"] == vali_answer["message"]["content"]:
+            if miner_answer.message.content == vali_answer.message.content:
                 return 1
         except Exception as e:
             print(e)
@@ -126,7 +126,7 @@ class Validator(BaseValidator, Module):
 
     def get_validate_input(self) -> ChatCompletionRequest:
         return ChatCompletionRequest(
-            model=self.model,
+            model=self.settings.model,
             messages=[{"role": "user", "content": self.dataset.random_prompt()}],
             seed=100,
             temperature=0,
