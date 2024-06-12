@@ -21,11 +21,11 @@ RUN pip install -U pdm
 # disable update check
 
 ENV PDM_CHECK_UPDATE=false
-ENV PATH="/code/.venv/bin:$PATH"
 
 WORKDIR /code
 COPY pdm.lock pyproject.toml /code/
 
 RUN pdm install --check --prod
+ENV PATH="/code/.venv/bin:$PATH"
 
 COPY . /code
