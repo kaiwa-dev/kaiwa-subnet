@@ -47,10 +47,12 @@ class InferenceEngine(Module):
         )
 
     @endpoint
-    def chat(
-        self, input: ChatCompletionRequest, timeout: int = 120
-    ) -> ChatCompletionResponse:
-        resp = asyncio.run(self.openai_serving_chat.create_chat_completion(input))
+    def chat(self, input: dict, timeout: int = 120) -> dict:
+        resp = asyncio.run(
+            self.openai_serving_chat.create_chat_completion(
+                ChatCompletionRequest.model_validate(input)
+            )
+        )
         return resp
 
     @endpoint
