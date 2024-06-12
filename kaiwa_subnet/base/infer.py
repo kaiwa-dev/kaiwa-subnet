@@ -53,7 +53,7 @@ class InferenceEngine(Module):
                 ChatCompletionRequest.model_validate(input)
             )
         )
-        return resp
+        return resp.model_dump()
 
     @endpoint
     def get_metadata(self) -> dict:
