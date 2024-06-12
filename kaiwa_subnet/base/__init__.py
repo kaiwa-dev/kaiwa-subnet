@@ -56,7 +56,7 @@ class BaseValidator:
                 params={"input": input.model_dump()},
                 timeout=self.call_timeout,
             )
-            return result.model_dump()
+            return result
         except Exception as e:
             logger.debug(f"Call error: {e}")
             return None
