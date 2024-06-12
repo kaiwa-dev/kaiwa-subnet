@@ -25,7 +25,6 @@ ENV PDM_CHECK_UPDATE=false
 WORKDIR /code
 COPY pdm.lock pyproject.toml /code/
 
-RUN pdm install --check --prod
-ENV PATH="/code/.venv/bin:$PATH"
+RUN pdm install --prod --project /code --check --global
 
 COPY . /code

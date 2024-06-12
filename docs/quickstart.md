@@ -15,7 +15,7 @@ If you want run it on testnet, add `--testnet` argument after `comx`.
 
 * NVIDIA GPU Driver installed
 * CUDA >= 12.2
-* Python >= 3.11
+* Python >= 3.10
 * [comx](https://github.com/agicommies/communex) cli tool for commune key management
 
 ## Register a module
