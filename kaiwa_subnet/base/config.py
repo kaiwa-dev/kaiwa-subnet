@@ -3,7 +3,7 @@ from typing import List
 
 
 class KaiwaBaseSettings(BaseSettings):
-    model: str = "NousResearch/Meta-Llama-3-8B-Instruct"
+    model: str = "casperhansen/llama-3-8b-instruct-awq"
 
     use_testnet: bool = False
     call_timeout: int = 60

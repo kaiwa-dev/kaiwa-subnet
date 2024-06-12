@@ -34,6 +34,7 @@ dependencies = [
     "torch @ https://download.pytorch.org/whl/cu121/torch-2.3.0%2Bcu121-cp311-cp311-linux_x86_64.whl ; python_version >= \"3.11\" and python_version < \"3.12\" and sys_platform == \"linux\"",
     "xformers @ https://download.pytorch.org/whl/cu121/xformers-0.0.26.post1-cp311-cp311-manylinux2014_x86_64.whl",
     "vllm==0.4.3",
+    "autoawq>=0.2.5",
 ]
 requires-python = "==3.11.*"
 readme = "README.md"

@@ -5,7 +5,27 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:ce9c4fbbc1b287bf2295f4a0eac1d0691ace1b2b969bf51ee8d3072087b17955"
+content_hash = "sha256:61bc99798ca6e21ff94bfa8069d7d3803d0faf7c16f9b75323591118051f5a6f"
+
+[[package]]
+name = "accelerate"
+version = "0.31.0"
+requires_python = ">=3.8.0"
+summary = "Accelerate"
+groups = ["default"]
+dependencies = [
+    "huggingface-hub",
+    "numpy>=1.17",
+    "packaging>=20.0",
+    "psutil",
+    "pyyaml",
+    "safetensors>=0.3.1",
+    "torch>=1.10.0",
+]
+files = [
+    {file = "accelerate-0.31.0-py3-none-any.whl", hash = "sha256:0fc608dc49584f64d04711a39711d73cb0ad4ef3d21cddee7ef2216e29471144"},
+    {file = "accelerate-0.31.0.tar.gz", hash = "sha256:b5199865b26106ccf9205acacbe8e4b3b428ad585e7c472d6a46f6fb75b6c176"},
+]
 
 [[package]]
 name = "aiohttp"
@@ -227,6 +247,41 @@ groups = ["default", "dev"]
 files = [
     {file = "attrs-23.2.0-py3-none-any.whl", hash = "sha256:99b87a485a5820b23b879f04c2305b44b951b502fd64be915879d77a7e8fc6f1"},
     {file = "attrs-23.2.0.tar.gz", hash = "sha256:935dc3b529c262f6cf76e50877d35a4bd3c1de194fd41f47a2b7ae8f19971f30"},
+]
+
+[[package]]
+name = "autoawq"
+version = "0.2.5"
+requires_python = ">=3.8.0"
+summary = "AutoAWQ implements the AWQ algorithm for 4-bit quantization with a 2x speedup during inference."
+groups = ["default"]
+dependencies = [
+    "accelerate",
+    "autoawq-kernels",
+    "datasets",
+    "tokenizers>=0.12.1",
+    "torch>=2.0.1",
+    "transformers>=4.35.0",
+    "typing-extensions>=4.8.0",
+    "zstandard",
+]
+files = [
+    {file = "autoawq-0.2.5-cp311-cp311-manylinux2014_x86_64.whl", hash = "sha256:2bc7289ede22a638911031e768f7c4549cc89e0165bd828167d553e5f95e1102"},
+    {file = "autoawq-0.2.5-cp311-cp311-win_amd64.whl", hash = "sha256:3aa640cf1c869ed99027086c1c292a1bda8c088608890abfd9bc8dc9b3187381"},
+]
+
+[[package]]
+name = "autoawq-kernels"
+version = "0.0.6"
+requires_python = ">=3.8.0"
+summary = "AutoAWQ Kernels implements the AWQ kernels."
+groups = ["default"]
+dependencies = [
+    "torch>=2.0.1",
+]
+files = [
+    {file = "autoawq_kernels-0.0.6-cp311-cp311-manylinux2014_x86_64.whl", hash = "sha256:eded9956bb3f3ad208ad2abde49c90ea5e17001175f2abb7edd5c9ac0156aeda"},
+    {file = "autoawq_kernels-0.0.6-cp311-cp311-win_amd64.whl", hash = "sha256:28d61e7d04a9c582a77c667351deadba61e7a6596b58a86226f52d69df18a511"},
 ]
 
 [[package]]
@@ -4213,4 +4268,26 @@ files = [
     {file = "yarl-1.9.4-cp312-cp312-win_amd64.whl", hash = "sha256:a9bd00dc3bc395a662900f33f74feb3e757429e545d831eef5bb280252631984"},
     {file = "yarl-1.9.4-py3-none-any.whl", hash = "sha256:928cecb0ef9d5a7946eb6ff58417ad2fe9375762382f1bf5c55e61645f2c43ad"},
     {file = "yarl-1.9.4.tar.gz", hash = "sha256:566db86717cf8080b99b58b083b773a908ae40f06681e87e589a976faf8246bf"},
+]
+
+[[package]]
+name = "zstandard"
+version = "0.22.0"
+requires_python = ">=3.8"
+summary = "Zstandard bindings for Python"
+groups = ["default"]
+dependencies = [
+    "cffi>=1.11; platform_python_implementation == \"PyPy\"",
+]
+files = [
+    {file = "zstandard-0.22.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:589402548251056878d2e7c8859286eb91bd841af117dbe4ab000e6450987e08"},
+    {file = "zstandard-0.22.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:a97079b955b00b732c6f280d5023e0eefe359045e8b83b08cf0333af9ec78f26"},
+    {file = "zstandard-0.22.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:445b47bc32de69d990ad0f34da0e20f535914623d1e506e74d6bc5c9dc40bb09"},
+    {file = "zstandard-0.22.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:33591d59f4956c9812f8063eff2e2c0065bc02050837f152574069f5f9f17775"},
+    {file = "zstandard-0.22.0-cp311-cp311-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:888196c9c8893a1e8ff5e89b8f894e7f4f0e64a5af4d8f3c410f0319128bb2f8"},
+    {file = "zstandard-0.22.0-cp311-cp311-musllinux_1_1_aarch64.whl", hash = "sha256:53866a9d8ab363271c9e80c7c2e9441814961d47f88c9bc3b248142c32141d94"},
+    {file = "zstandard-0.22.0-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:4ac59d5d6910b220141c1737b79d4a5aa9e57466e7469a012ed42ce2d3995e88"},
+    {file = "zstandard-0.22.0-cp311-cp311-win32.whl", hash = "sha256:2b11ea433db22e720758cba584c9d661077121fcf60ab43351950ded20283440"},
+    {file = "zstandard-0.22.0-cp311-cp311-win_amd64.whl", hash = "sha256:11f0d1aab9516a497137b41e3d3ed4bbf7b2ee2abc79e5c8b010ad286d7464bd"},
+    {file = "zstandard-0.22.0.tar.gz", hash = "sha256:8226a33c542bcb54cd6bd0a366067b610b41713b64c9abec1bc4533d69f51e70"},
 ]

@@ -52,9 +52,9 @@ def validator(
     model: Annotated[
         Optional[str],
         typer.Argument(
-            help="models to be loaded, separated by comma. default to 'NousResearch/Meta-Llama-3-8B-Instruct' "
+            help="models to be loaded, separated by comma. default to 'casperhansen/llama-3-8b-instruct-awq' "
         ),
-    ] = "NousResearch/Meta-Llama-3-8B-Instruct",
+    ] = "casperhansen/llama-3-8b-instruct-awq",
     call_timeout: int = 30,
     iteration_interval: int = 60,
 ):
@@ -88,9 +88,9 @@ def miner(
     model: Annotated[
         Optional[str],
         typer.Argument(
-            help="models to be loaded, separated by comma. default to 'NousResearch/Meta-Llama-3-8B-Instruct' "
+            help="models to be loaded, separated by comma. default to 'casperhansen/llama-3-8b-instruct-awq' "
         ),
-    ] = "NousResearch/Meta-Llama-3-8B-Instruct",
+    ] = "casperhansen/llama-3-8b-instruct-awq",
 ):
     from kaiwa_subnet.miner import Miner, MinerSettings
 

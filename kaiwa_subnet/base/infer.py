@@ -22,13 +22,14 @@ from vllm.entrypoints.openai.serving_engine import LoRAModulePath
 
 
 class InferenceEngine(Module):
-    def __init__(self, model: str = "NousResearch/Meta-Llama-3-8B-Instruct") -> None:
+    def __init__(self, model: str = "casperhansen/llama-3-8b-instruct-awq") -> None:
         super().__init__()
         engine_args = AsyncEngineArgs(
             model=model,
+            dtype="half",
             enforce_eager=True,
             max_model_len=2048,
-            quantization="fp8",
+            quantization="awq",
         )
         self.engine = AsyncLLMEngine.from_engine_args(engine_args)
         model_config = asyncio.run(self.engine.get_model_config())
@@ -61,7 +62,7 @@ if __name__ == "__main__":
     d = InferenceEngine()
     out = d.chat(
         request=ChatCompletionRequest(
-            model="NousResearch/Meta-Llama-3-8B-Instruct",
+            model="casperhansen/llama-3-8b-instruct-awq",
             messages=[{"role": "user", "content": "Hello!"}],
         )
     )
