@@ -130,6 +130,7 @@ class Validator(BaseValidator, Module):
             messages=[{"role": "user", "content": self.dataset.random_prompt()}],
             seed=100,
             temperature=0,
+            top_logprobs=0,
         )
 
     def validation_loop(self) -> None:
