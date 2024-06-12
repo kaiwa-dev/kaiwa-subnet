@@ -53,7 +53,7 @@ class BaseValidator:
             result = await client.call(
                 fn="chat",
                 target_key=miner_key,
-                params={"input": input},
+                params={"input": input.model_dump()},
                 timeout=self.call_timeout,
             )
             return result
