@@ -55,6 +55,7 @@ def validator(
             help="models to be loaded, separated by comma. default to 'casperhansen/llama-3-8b-instruct-awq' "
         ),
     ] = "casperhansen/llama-3-8b-instruct-awq",
+    gpu_memory_utilization: Annotated[float, typer.Argument(help="float")] = 0.9,
     call_timeout: int = 30,
     iteration_interval: int = 60,
 ):
@@ -67,6 +68,7 @@ def validator(
         host=host,
         port=port,
         model=model,
+        gpu_memory_utilization=gpu_memory_utilization,
     )
     validator = Validator(key=classic_load_key(commune_key), settings=settings)
     validator.serve()
@@ -91,6 +93,7 @@ def miner(
             help="models to be loaded, separated by comma. default to 'casperhansen/llama-3-8b-instruct-awq' "
         ),
     ] = "casperhansen/llama-3-8b-instruct-awq",
+    gpu_memory_utilization: Annotated[float, typer.Argument(help="float")] = 0.9,
 ):
     from kaiwa_subnet.miner import Miner, MinerSettings
 
@@ -99,6 +102,7 @@ def miner(
         host=host,
         port=port,
         model=model,
+        gpu_memory_utilization=gpu_memory_utilization,
     )
     miner = Miner(key=classic_load_key(commune_key), settings=settings)
     miner.serve()

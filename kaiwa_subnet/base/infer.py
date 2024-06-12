@@ -19,17 +19,19 @@ from vllm.entrypoints.openai.protocol import (
 )
 from vllm.entrypoints.openai.serving_chat import OpenAIServingChat
 from vllm.entrypoints.openai.serving_engine import LoRAModulePath
+from .config import KaiwaBaseSettings
 
 
 class InferenceEngine(Module):
-    def __init__(self, model: str = "casperhansen/llama-3-8b-instruct-awq") -> None:
+    def __init__(self, settings: KaiwaBaseSettings) -> None:
         super().__init__()
         engine_args = AsyncEngineArgs(
-            model=model,
+            model=settings.model,
             dtype="half",
             max_model_len=2048,
             quantization="awq",
-            gpu_memory_utilization=0.5,
+            gpu_memory_utilization=settings.gpu_memory_utilization,
+            kv_cache_dtype="fp8",
         )
         self.engine = AsyncLLMEngine.from_engine_args(engine_args)
         model_config = asyncio.run(self.engine.get_model_config())
