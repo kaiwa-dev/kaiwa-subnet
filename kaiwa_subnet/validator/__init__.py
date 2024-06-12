@@ -38,7 +38,7 @@ class Validator(BaseValidator, Module):
         self.settings = settings or ValidatorSettings()
         self.key = key
         self.netuid = get_netuid(self.c_client)
-        self.model = InferenceEngine()
+        self.model = InferenceEngine(settings=settings)
         self.dataset = ValidationDataset()
         self.call_timeout = self.settings.call_timeout
         self.weights_histories = deque(maxlen=10)
