@@ -47,17 +47,13 @@ class InferenceEngine(Module):
 
     @endpoint
     def chat(self, input: dict, timeout: int = 120) -> dict:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        try:
-            resp = loop.run_until_complete(
-                self.openai_serving_chat.create_chat_completion(
-                    ChatCompletionRequest.model_validate(input)
-                )
+        async_task = asyncio.create_task(
+            self.openai_serving_chat.create_chat_completion(
+                ChatCompletionRequest.model_validate(input)
             )
-            return resp.model_dump()
-        finally:
-            loop.close()
+        )
+        resp = asyncio.get_event_loop().run_until_complete(async_task)
+        return resp.model_dump()
 
     @endpoint
     def get_metadata(self) -> dict:
