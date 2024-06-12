@@ -50,7 +50,11 @@ class InferenceEngine(Module):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         try:
-            resp = loop.run_until_complete(self.validate_step())
+            resp = loop.run_until_complete(
+                self.openai_serving_chat.create_chat_completion(
+                    ChatCompletionRequest.model_validate(input)
+                )
+            )
             return resp.model_dump()
         finally:
             loop.close()
