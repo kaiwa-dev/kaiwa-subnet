@@ -29,6 +29,7 @@ class InferenceEngine(Module):
             dtype="half",
             max_model_len=2048,
             quantization="awq",
+            gpu_memory_utilization=0.5,
         )
         self.engine = AsyncLLMEngine.from_engine_args(engine_args)
         model_config = asyncio.run(self.engine.get_model_config())
