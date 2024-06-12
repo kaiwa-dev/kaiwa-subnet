@@ -24,6 +24,6 @@ ENV PDM_CHECK_UPDATE=false
 WORKDIR /code
 COPY pdm.lock pyproject.toml /code/
 
-RUN pdm install --check --prod --no-editable
+RUN pdm install --check --prod
 
 COPY . /code
