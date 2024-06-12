@@ -139,7 +139,12 @@ class Validator(BaseValidator, Module):
             try:
                 logger.info(f"run validation loop")
                 start_time = time.time()
-                asyncio.run(self.validate_step())
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                try:
+                    loop.run_until_complete(self.validate_step())
+                finally:
+                    loop.close()
                 elapsed = time.time() - start_time
                 if elapsed < settings.iteration_interval:
                     sleep_time = settings.iteration_interval - elapsed
