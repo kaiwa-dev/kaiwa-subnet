@@ -27,7 +27,6 @@ class InferenceEngine(Module):
         engine_args = AsyncEngineArgs(
             model=model,
             dtype="half",
-            enforce_eager=True,
             max_model_len=2048,
             quantization="awq",
         )
@@ -48,12 +47,13 @@ class InferenceEngine(Module):
 
     @endpoint
     def chat(self, input: dict, timeout: int = 120) -> dict:
-        resp = asyncio.run(
-            self.openai_serving_chat.create_chat_completion(
-                ChatCompletionRequest.model_validate(input)
-            )
-        )
-        return resp.model_dump()
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            resp = loop.run_until_complete(self.validate_step())
+            return resp.model_dump()
+        finally:
+            loop.close()
 
     @endpoint
     def get_metadata(self) -> dict:
