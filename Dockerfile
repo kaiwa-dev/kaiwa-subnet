@@ -1,8 +1,4 @@
-FROM ollama/ollama:0.1.38
-
-# override entrypoint
-ENTRYPOINT []
-CMD ""
+FROM nvidia/cuda:12.2.0-runtime-ubuntu22.04
 
 ENV PYTHONFAULTHANDLER=1 \
 PYTHONUNBUFFERED=1 \
@@ -20,11 +16,14 @@ RUN apt-get update && \
     apt-get install -y git curl python3-pip python3-dev python-is-python3 && \
     rm -rf /var/lib/apt/lists/*
 
-RUN curl -sSL https://install.python-poetry.org | python3 -
+# install PDM
+RUN pip install -U pdm
+# disable update check
+ENV PDM_CHECK_UPDATE=false
 
 WORKDIR /code
-COPY poetry.lock pyproject.toml /code/
+COPY pdm.lock pyproject.toml /code/
 
-RUN poetry install --only=main --no-interaction --no-ansi --no-root
+RUN pdm install --check --prod --no-editable
 
 COPY . /code

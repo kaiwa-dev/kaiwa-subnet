@@ -15,7 +15,7 @@ If you want run it on testnet, add `--testnet` argument after `comx`.
 
 * NVIDIA GPU Driver installed
 * CUDA >= 12.2
-* Python >= 3.10
+* Python >= 3.11
 * [comx](https://github.com/agicommies/communex) cli tool for commune key management
 
 ## Register a module
@@ -71,7 +71,7 @@ containrrr/watchtower --interval 300 kaiwa-miner kaiwa-validator
 
 ## Running with source code
 ## Installation
-[Install Poetry](https://python-poetry.org/docs/) if you don't have it.
+[Install PDM](https://pdm-project.org/en/latest/) if you don't have it.
 
 After that, run the following commands:
 
@@ -81,22 +81,24 @@ git clone https://github.com/kaiwax-org/kaiwa-subnet
 cd kaiwa-subnet
 
 # start virtualenv and enter it
-poetry shell
+pdm venv create
+source .venv/bin/activate
 
 # install dependencies
-poetry install
+pdm install
 ```
 
 ### Miner Setup
 ```bash
-python kaiwa_subnet/cli.py [--testnet] [--log-level=INFO] miner <your_commune_key> <host> <port>
+python kaiwa_subnet/cli.py [--testnet] [--log-level=INFO] miner <your_commune_key> <host> <port> [--gpu-memory-utilization=0.9]
 ```
-host should be `0.0.0.0` so it allows all the incoming requests with other ip and for the local testing use `127.0.0.1`
+host should be `0.0.0.0` so it allows all the incoming requests with other ip and for the local testing use `127.0.0.1`. You should set a reasonable gpu-memory-utilization parameter to meet the running requirements. The valid range for this parameter is from 0 to 1, the default value is 0.9 if not set.
 
 ### Validator Setup
+You should set a reasonable gpu-memory-utilization parameter to meet the running requirements. The valid range for this parameter is from 0 to 1, the default value is 0.9 if not set.
 
 ```bash
-python kaiwa_subnet/cli.py [--testnet] [--log-level=INFO] validator <your_commune_key> [host] [port]
+python kaiwa_subnet/cli.py [--testnet] [--log-level=INFO] validator <your_commune_key> [host] [port] [--gpu-memory-utilization=0.9]
 ```
 
 ### Gateway Setup
