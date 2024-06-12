@@ -106,6 +106,7 @@ class Gateway(BaseValidator):
     "/chat",
 )
 async def chat(req: ChatCompletionRequest):
+    req.top_logprobs = None
     top_miners = list(app.m.get_top_miners().values())
     top_miners = random.sample(top_miners, min(len(top_miners), 5))
     tasks = [

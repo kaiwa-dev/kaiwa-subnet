@@ -5,6 +5,7 @@ from collections import deque
 from datetime import datetime
 import threading
 import traceback
+import random
 
 from communex._common import get_node_url
 from communex.client import CommuneClient
@@ -131,7 +132,7 @@ class Validator(BaseValidator, Module):
         return ChatCompletionRequest(
             model=self.settings.model,
             messages=[{"role": "user", "content": self.dataset.random_prompt()}],
-            seed=100,
+            seed=random.randint(0, 20000000),
             temperature=0,
             top_logprobs=None,
         )

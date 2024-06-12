@@ -44,7 +44,7 @@ class BaseValidator:
         self,
         miner_info: tuple[list[str], Ss58Address],
         input: ChatCompletionRequest,
-    ) -> Optional[bytes]:
+    ) -> Optional[dict]:
         try:
             connection, miner_key = miner_info
             module_ip, module_port = connection
@@ -56,7 +56,7 @@ class BaseValidator:
                 params={"input": input.model_dump()},
                 timeout=self.call_timeout,
             )
-            return result
+            return result.model_dump()
         except Exception as e:
             logger.debug(f"Call error: {e}")
             return None
@@ -65,7 +65,7 @@ class BaseValidator:
         self,
         miner_info: tuple[list[str], Ss58Address],
         input: ChatCompletionRequest,
-    ) -> tuple[Optional[bytes], float]:
+    ) -> tuple[Optional[dict], float]:
         start = time.time()
         try:
             result = await self.get_miner_generation_async(
