@@ -43,7 +43,7 @@ class BaseValidator:
     async def get_miner_generation_async(
         self,
         miner_info: tuple[list[str], Ss58Address],
-        input: dict,
+        input: ChatCompletionRequest,
     ) -> Optional[bytes]:
         try:
             connection, miner_key = miner_info
@@ -64,7 +64,7 @@ class BaseValidator:
     async def get_miner_generation_with_elapsed(
         self,
         miner_info: tuple[list[str], Ss58Address],
-        input: dict,
+        input: ChatCompletionRequest,
     ) -> tuple[Optional[bytes], float]:
         start = time.time()
         try:
