@@ -19,7 +19,9 @@ RUN apt-get update && \
 # install PDM
 RUN pip install -U pdm
 # disable update check
+
 ENV PDM_CHECK_UPDATE=false
+ENV PATH="/code/.venv/bin:$PATH"
 
 WORKDIR /code
 COPY pdm.lock pyproject.toml /code/
