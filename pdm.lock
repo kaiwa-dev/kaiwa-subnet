@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:a3cf1858dff6c665f01bca8d9cc75fde3ac7a7b6b711eabf795e2a51fb5dace6"
+content_hash = "sha256:c3fb53e021e789a1145caf9b87b3a34d078e6de5997588fe6ea141e2df65c458"
 
 [[package]]
 name = "accelerate"
@@ -3721,9 +3721,8 @@ files = [
 
 [[package]]
 name = "torch"
-version = "2.3.0"
+version = "2.3.0+cu121"
 requires_python = ">=3.8.0"
-url = "https://download.pytorch.org/whl/cu121/torch-2.3.0%2Bcu121-cp311-cp311-linux_x86_64.whl"
 summary = "Tensors and Dynamic neural networks in Python with strong GPU acceleration"
 groups = ["default"]
 dependencies = [
@@ -3748,7 +3747,39 @@ dependencies = [
     "typing-extensions>=4.8.0",
 ]
 files = [
+    {file = "torch-2.3.0+cpu-cp310-cp310-linux_x86_64.whl", hash = "sha256:e3c220702d82c7596924150e0499fbbffcf62a88a59adc860fa357cd8dc1c302"},
+    {file = "torch-2.3.0+cpu-cp310-cp310-win_amd64.whl", hash = "sha256:ab0c05525195b8fecdf2ea75968ed32ccd87dff16381b6e13249babb4a9596ff"},
+    {file = "torch-2.3.0+cpu-cp311-cp311-linux_x86_64.whl", hash = "sha256:97a38b25ee0e3d020691e7846efbca62a3d8a57645c027dcb5ba0adfec36fe55"},
+    {file = "torch-2.3.0+cpu-cp311-cp311-win_amd64.whl", hash = "sha256:a8ac195974be6f067245bae8156b8c06fb0a723b0eed8f2e244b5dd58c7e2a49"},
+    {file = "torch-2.3.0+cpu-cp312-cp312-linux_x86_64.whl", hash = "sha256:a8982e52185771591dad577a124a7770f72f288f8ae5833317b1e329c0d2f07e"},
+    {file = "torch-2.3.0+cpu-cp312-cp312-win_amd64.whl", hash = "sha256:483131a7997995d867313ee902743084e844e830ab2a0c5e079c61ec2da3cd17"},
+    {file = "torch-2.3.0+cpu.cxx11.abi-cp310-cp310-linux_x86_64.whl", hash = "sha256:896e8a82f441ff8ae5c8acd2fddd48d9ae1f2738fb8c083b912debbbe09c553b"},
+    {file = "torch-2.3.0+cpu.cxx11.abi-cp311-cp311-linux_x86_64.whl", hash = "sha256:1a841294509f4710931de8d8311de311a116f7bfbeb00fa07d267ec277573086"},
+    {file = "torch-2.3.0+cpu.cxx11.abi-cp312-cp312-linux_x86_64.whl", hash = "sha256:d02b2230f2a682ecdb7aafe4b2702c968943744a582ef6913b7364cbd174cf38"},
+    {file = "torch-2.3.0+cu118-cp310-cp310-linux_x86_64.whl", hash = "sha256:b42a1fc72d862f708b1f9114ca1fb5de8139a436482ef1beeddb44f98b4ec508"},
+    {file = "torch-2.3.0+cu118-cp310-cp310-win_amd64.whl", hash = "sha256:ceb81d79fc7b017f51b1613f83b878efb8974cc946631fb9cd577bbaa2873293"},
+    {file = "torch-2.3.0+cu118-cp311-cp311-linux_x86_64.whl", hash = "sha256:4888984f292c2dfa12e49b951356c692a096a9c4790efab7fdbfc8db8cd8f13f"},
+    {file = "torch-2.3.0+cu118-cp311-cp311-win_amd64.whl", hash = "sha256:14b251fce989091b7a63bafad8826c8effbd81e7742746a596cc70234be3fb20"},
+    {file = "torch-2.3.0+cu118-cp312-cp312-linux_x86_64.whl", hash = "sha256:eceaa7ba73df1b0c37d76a5c9eaa1a1ae141512bcae4ed259f2bf06aea591bc3"},
+    {file = "torch-2.3.0+cu118-cp312-cp312-win_amd64.whl", hash = "sha256:9c396ea823d5275b806045e3e66a9c2e8382c9fe83a2bcaac1c2bd0f0e45bff4"},
+    {file = "torch-2.3.0+cu121-cp310-cp310-linux_x86_64.whl", hash = "sha256:0a12aa9aa6bc442dff8823ac8b48d991fd0771562eaa38593f9c8196d65f7007"},
+    {file = "torch-2.3.0+cu121-cp310-cp310-win_amd64.whl", hash = "sha256:002027d18a9c054f08fe9cf7a729e041229e783e065a71349015dcccc9a7137e"},
     {file = "torch-2.3.0+cu121-cp311-cp311-linux_x86_64.whl", hash = "sha256:5df7e3cb3961018a891e4edef1e0bc1f3304a8d943f81b24a8c6bf687ca49a67"},
+    {file = "torch-2.3.0+cu121-cp311-cp311-win_amd64.whl", hash = "sha256:f7876ec20b42dd569e7a11c5af36febccc03830f63dfdedbd4026506e086cab6"},
+    {file = "torch-2.3.0+cu121-cp312-cp312-linux_x86_64.whl", hash = "sha256:f15b6f549eebc6e6b22b26754e4f1d7e4469bcd2d4ba1eaab57268ad80bcca96"},
+    {file = "torch-2.3.0+cu121-cp312-cp312-win_amd64.whl", hash = "sha256:58ac08166e7a3665362960ff013edd06c90a0926de62de47a930c03563b0ac0f"},
+    {file = "torch-2.3.0+rocm5.7-cp310-cp310-linux_x86_64.whl", hash = "sha256:6a8d1693e0741f86aace5a8de46fe5dc0c660b5e037c2c7197b68ff42b748ad2"},
+    {file = "torch-2.3.0+rocm5.7-cp311-cp311-linux_x86_64.whl", hash = "sha256:5d91b3618159d13acbc3d076f3caaa2aeb8cd2b4d44865adcfab957269aa282b"},
+    {file = "torch-2.3.0+rocm5.7-cp312-cp312-linux_x86_64.whl", hash = "sha256:a3811f67353748ab7e33d106c45322a23ea958f9d4f503c5a830af54cb455461"},
+    {file = "torch-2.3.0+rocm6.0-cp310-cp310-linux_x86_64.whl", hash = "sha256:266af54cf4704aae08719305c205f0d12f40874006d3b8058f38e2f8ed08f56d"},
+    {file = "torch-2.3.0+rocm6.0-cp311-cp311-linux_x86_64.whl", hash = "sha256:fc3cc0638a43db03f06ca5aae4b759c8ea53733aec64ab009c2cae04e4e121db"},
+    {file = "torch-2.3.0+rocm6.0-cp312-cp312-linux_x86_64.whl", hash = "sha256:992c1ffb65c773a5848e4bbe22235c0386a7915690615ad68a45609228c13269"},
+    {file = "torch-2.3.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:7e24c138c3bacc8c511c6b8211f09c3bf547d3cbe3756321acec1bdce40fec6b"},
+    {file = "torch-2.3.0-cp310-none-macosx_11_0_arm64.whl", hash = "sha256:758ef938de87a2653bba74b91f703458c15569f1562bf4b6c63c62d9c5a0c1f5"},
+    {file = "torch-2.3.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:147992d3af01e3f2a772a68877e8937989e57c4225b82a4989d3cd9582c8bcd1"},
+    {file = "torch-2.3.0-cp311-none-macosx_11_0_arm64.whl", hash = "sha256:d24e328226d8e2af7cf80fcb1d2f1d108e0de32777fab4aaa2b37b9765d8be73"},
+    {file = "torch-2.3.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:6e138261af06cd902a826526082ade534b66093b9d8f6ff2d401ce439aa2350c"},
+    {file = "torch-2.3.0-cp312-none-macosx_11_0_arm64.whl", hash = "sha256:dca986214267b34065a79000cee54232e62b41dff1ec2cab9abc3fc8b3dee0ad"},
 ]
 
 [[package]]
@@ -4220,7 +4251,6 @@ files = [
 name = "xformers"
 version = "0.0.26.post1"
 requires_python = ">=3.7"
-url = "https://download.pytorch.org/whl/cu121/xformers-0.0.26.post1-cp311-cp311-manylinux2014_x86_64.whl"
 summary = "XFormers: A collection of composable Transformer building blocks."
 groups = ["default"]
 dependencies = [
@@ -4228,7 +4258,11 @@ dependencies = [
     "torch==2.3.0",
 ]
 files = [
+    {file = "xformers-0.0.26.post1-cp310-cp310-manylinux2014_x86_64.whl", hash = "sha256:1fe0f9a3dddb7f6175c2e34de2f318d6742eec28c068b8334b093016b2c9c2c8"},
+    {file = "xformers-0.0.26.post1-cp310-cp310-win_amd64.whl", hash = "sha256:e34b8dd6982077bee0c8eb2db8bc1513177201bfe0af890a4db42d8d31c966a5"},
     {file = "xformers-0.0.26.post1-cp311-cp311-manylinux2014_x86_64.whl", hash = "sha256:0d35615870b9237077aec51802a5a821f9e9d2708730c8914d5cff301fb29558"},
+    {file = "xformers-0.0.26.post1-cp311-cp311-win_amd64.whl", hash = "sha256:d05c547b4ba603fc8e21fad03a342138eaaece35fe0a1692e6ee0d061ddd21ac"},
+    {file = "xformers-0.0.26.post1.tar.gz", hash = "sha256:1d14b5f999ede649198379b0470ebdd25007ba224ae336ef958124158a6de8b1"},
 ]
 
 [[package]]
