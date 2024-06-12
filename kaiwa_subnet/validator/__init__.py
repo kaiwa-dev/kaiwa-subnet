@@ -71,7 +71,7 @@ class Validator(BaseValidator, Module):
             )
             futures.append(future)
         miner_answers = await asyncio.gather(*futures)
-        vali_answer = self.model.chat(input=input)
+        vali_answer = await self.model.chat(input=input)
         for uid, miner_response in zip(modules_info.keys(), miner_answers):
             miner_answer, elapsed = miner_response
             if not miner_answer:
@@ -130,7 +130,7 @@ class Validator(BaseValidator, Module):
             messages=[{"role": "user", "content": self.dataset.random_prompt()}],
             seed=100,
             temperature=0,
-            top_logprobs=0,
+            logprobs=True,
         )
 
     def validation_loop(self) -> None:
@@ -139,12 +139,7 @@ class Validator(BaseValidator, Module):
             try:
                 logger.info(f"run validation loop")
                 start_time = time.time()
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-                try:
-                    loop.run_until_complete(self.validate_step())
-                finally:
-                    loop.close()
+                asyncio.run(self.validate_step())
                 elapsed = time.time() - start_time
                 if elapsed < settings.iteration_interval:
                     sleep_time = settings.iteration_interval - elapsed
