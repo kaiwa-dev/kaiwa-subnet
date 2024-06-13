@@ -13,9 +13,9 @@ The Validator continually dispatches inference tasks to the miner while independ
 ## Roadmap
 
 **Phase 1: Run AI models on Commune subnet**
-We'll start by enabling open-source model inference for text-to-text tasks. Initially, we'll focus on models like Llama3 and Mixtrial 7b.
-To ensure accuracy, we'll check that miners produce the right results using fixed random seeds with the chosen model.
-We'll also integrate Portal and Gateway to streamline access to models and data from existing Commune subnet networks like Synthia, 0xScope, and Mosaic. 
+- We'll start by enabling open-source model inference for text-to-text tasks. Initially, we'll focus on models like Llama3 and Mixtrial 7b.
+- To ensure accuracy, we'll check that miners produce the right results using fixed random seeds with the chosen model.
+- We'll also integrate Portal and Gateway to streamline access to models and data from existing Commune subnet networks like Synthia, 0xScope, and Mosaic. 
 
 **Phase 2: Serve for scenarios on Commune Subnet**
 - As we add more models, we'll introduce a universal router to match users' budgets with the best model for their specific needs.
