@@ -18,7 +18,7 @@ from loguru import logger
 
 class Miner(InferenceEngine):
     def __init__(self, key: Keypair, settings: MinerSettings = None) -> None:
-        super().__init__()
+        super().__init__(settings=settings)
         self.settings = settings or MinerSettings()
         self.key = key
         self.c_client = CommuneClient(

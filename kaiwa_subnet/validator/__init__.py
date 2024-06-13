@@ -5,6 +5,7 @@ from collections import deque
 from datetime import datetime
 import threading
 import traceback
+import random
 
 from communex._common import get_node_url
 from communex.client import CommuneClient
@@ -19,6 +20,7 @@ from kaiwa_subnet.validator._config import ValidatorSettings
 from kaiwa_subnet.validator.dataset import ValidationDataset
 from kaiwa_subnet.validator.utils import normalize_score, weight_score
 from kaiwa_subnet.base.infer import InferenceEngine
+from kaiwa_subnet.base.schema import ChatCompletionRequest
 from communex.module.module import Module, endpoint
 from typing import List
 from pydantic import BaseModel
@@ -36,7 +38,7 @@ class Validator(BaseValidator, Module):
         self.settings = settings or ValidatorSettings()
         self.key = key
         self.netuid = get_netuid(self.c_client)
-        self.model = InferenceEngine()
+        self.model = InferenceEngine(settings=settings)
         self.dataset = ValidationDataset()
         self.call_timeout = self.settings.call_timeout
         self.weights_histories = deque(maxlen=10)
@@ -48,7 +50,10 @@ class Validator(BaseValidator, Module):
     def calculate_score(self, miner_answer: dict, vali_answer: dict):
         logger.debug(f"miner answer: {miner_answer} vali_answer: {vali_answer}")
         try:
-            if miner_answer["message"]["content"] == vali_answer["message"]["content"]:
+            if (
+                miner_answer["choices"][0]["message"]["content"]
+                == vali_answer["choices"][0]["message"]["content"]
+            ):
                 return 1
         except Exception as e:
             print(e)
@@ -70,7 +75,7 @@ class Validator(BaseValidator, Module):
             )
             futures.append(future)
         miner_answers = await asyncio.gather(*futures)
-        vali_answer = self.model.chat(input=input)
+        vali_answer = await self.model.chat(input=input)
         for uid, miner_response in zip(modules_info.keys(), miner_answers):
             miner_answer, elapsed = miner_response
             if not miner_answer:
@@ -123,12 +128,14 @@ class Validator(BaseValidator, Module):
         except Exception as e:
             logger.error(e)
 
-    def get_validate_input(self) -> dict:
-        return {
-            "model": "llama3",
-            "messages": [{"role": "user", "content": self.dataset.random_prompt()}],
-            "options": {"temperature": 0, "seed": 100},
-        }
+    def get_validate_input(self) -> ChatCompletionRequest:
+        return ChatCompletionRequest(
+            model=self.settings.model,
+            messages=[{"role": "user", "content": self.dataset.random_prompt()}],
+            seed=random.randint(0, 20000000),
+            temperature=0,
+            top_logprobs=None,
+        )
 
     def validation_loop(self) -> None:
         settings = self.settings

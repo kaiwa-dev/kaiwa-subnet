@@ -49,12 +49,13 @@ def validator(
         ),
     ] = "0.0.0.0",
     port: Annotated[Optional[int], typer.Argument(help="port")] = 0,
-    models: Annotated[
+    model: Annotated[
         Optional[str],
-        typer.Argument(
-            help="models to be loaded, separated by comma. default to 'llama3' "
+        typer.Option(
+            help="models to be loaded, separated by comma. default to 'casperhansen/llama-3-8b-instruct-awq' "
         ),
-    ] = "llama3",
+    ] = "casperhansen/llama-3-8b-instruct-awq",
+    gpu_memory_utilization: Annotated[float, typer.Option(help="float")] = 0.9,
     call_timeout: int = 30,
     iteration_interval: int = 60,
 ):
@@ -66,7 +67,8 @@ def validator(
         call_timeout=call_timeout,
         host=host,
         port=port,
-        models=models.split(","),
+        model=model,
+        gpu_memory_utilization=gpu_memory_utilization,
     )
     validator = Validator(key=classic_load_key(commune_key), settings=settings)
     validator.serve()
@@ -85,12 +87,13 @@ def miner(
         ),
     ],
     port: Annotated[int, typer.Argument(help="port")],
-    models: Annotated[
+    model: Annotated[
         Optional[str],
-        typer.Argument(
-            help="models to be loaded, separated by comma. default to 'llama3' "
+        typer.Option(
+            help="models to be loaded, separated by comma. default to 'casperhansen/llama-3-8b-instruct-awq' "
         ),
-    ] = "llama3",
+    ] = "casperhansen/llama-3-8b-instruct-awq",
+    gpu_memory_utilization: Annotated[float, typer.Option(help="float")] = 0.9,
 ):
     from kaiwa_subnet.miner import Miner, MinerSettings
 
@@ -98,7 +101,8 @@ def miner(
         use_testnet=ctx.obj.use_testnet,
         host=host,
         port=port,
-        models=models.split(","),
+        model=model,
+        gpu_memory_utilization=gpu_memory_utilization,
     )
     miner = Miner(key=classic_load_key(commune_key), settings=settings)
     miner.serve()
@@ -112,12 +116,6 @@ def gateway(
     ],
     host: Annotated[str, typer.Argument(help="host")],
     port: Annotated[int, typer.Argument(help="port")],
-    models: Annotated[
-        Optional[str],
-        typer.Argument(
-            help="models to be loaded, separated by comma. default to 'llama3' "
-        ),
-    ] = "llama3",
     call_timeout: int = 65,
 ):
     import uvicorn
