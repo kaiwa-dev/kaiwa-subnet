@@ -135,6 +135,7 @@ class Validator(BaseValidator, Module):
             seed=random.randint(0, 20000000),
             temperature=0,
             top_logprobs=None,
+            top_k=1,
         )
 
     def validation_loop(self) -> None:
