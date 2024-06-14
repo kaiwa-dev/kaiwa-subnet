@@ -19,6 +19,7 @@ from kaiwa_subnet.base.utils import get_netuid
 from kaiwa_subnet.validator._config import ValidatorSettings
 from kaiwa_subnet.validator.dataset import ValidationDataset
 from kaiwa_subnet.validator.utils import normalize_score, weight_score
+from kaiwa_subnet.validator.embed import EmbeddingModel
 from kaiwa_subnet.base.infer import InferenceEngine
 from kaiwa_subnet.base.schema import ChatCompletionRequest
 from communex.module.module import Module, endpoint
@@ -42,22 +43,11 @@ class Validator(BaseValidator, Module):
         self.dataset = ValidationDataset()
         self.call_timeout = self.settings.call_timeout
         self.weights_histories = deque(maxlen=10)
+        self.embed = EmbeddingModel()
 
     @property
     def c_client(self):
         return CommuneClient(get_node_url(use_testnet=self.settings.use_testnet))
-
-    def calculate_score(self, miner_answer: dict, vali_answer: dict):
-        logger.debug(f"miner answer: {miner_answer} vali_answer: {vali_answer}")
-        try:
-            if (
-                miner_answer["choices"][0]["message"]["content"]
-                == vali_answer["choices"][0]["message"]["content"]
-            ):
-                return 1
-        except Exception as e:
-            print(e)
-        return 0
 
     async def validate_step(self):
         score_dict = dict()
@@ -76,12 +66,22 @@ class Validator(BaseValidator, Module):
             futures.append(future)
         miner_answers = await asyncio.gather(*futures)
         vali_answer = await self.model.chat(input=input)
+        vali_answer_embed = self.embed.embed(
+            vali_answer["choices"][0]["message"]["content"]
+        )
         for uid, miner_response in zip(modules_info.keys(), miner_answers):
             miner_answer, elapsed = miner_response
             if not miner_answer:
                 logger.debug(f"Skipping miner {uid}: no answer")
                 continue
-            score = self.calculate_score(miner_answer, vali_answer)
+            try:
+                miner_answer_embed = self.embed.embed(
+                    miner_answer["choices"][0]["message"]["content"]
+                )
+            except Exception as e:
+                print(e)
+                continue
+            score = self.embed.similarity(miner_answer_embed, vali_answer_embed)
             if score == 0:
                 logger.debug(f"Skipping miner {uid}: score is 0")
                 continue

@@ -5,7 +5,9 @@ def sigmoid(x: float):
     return 1 / (1 + math.exp(-x))
 
 
-def normalize_score(score_dict: dict[int, float], duration_dict: dict[int, float]) -> dict[int, float]:
+def normalize_score(
+    score_dict: dict[int, float], duration_dict: dict[int, float]
+) -> dict[int, float]:
     mean_score = sum(score_dict.values()) / len(score_dict)
     threshold = mean_score * 0.95
 
