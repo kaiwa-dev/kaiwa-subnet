@@ -9,7 +9,7 @@ import typer
 from loguru import logger
 from communex.compat.key import classic_load_key
 
-DEFAULT_MODEL = "casperhansen/llama-3-8b-instruct-awq"
+DEFAULT_MODEL = "astronomer/Llama-3-8B-Instruct-GPTQ-8-Bit"
 
 cli = typer.Typer()
 

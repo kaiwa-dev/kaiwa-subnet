@@ -27,7 +27,7 @@ class InferenceEngine(Module):
             tokenizer=settings.model,
             dtype="half",
             max_model_len=2048,
-            quantization="awq",
+            quantization="gptq",
             gpu_memory_utilization=settings.gpu_memory_utilization,
         )
         self.engine = AsyncLLMEngine.from_engine_args(engine_args)
@@ -60,13 +60,18 @@ class InferenceEngine(Module):
 
 
 if __name__ == "__main__":
-    model_name = "casperhansen/llama-3-8b-instruct-awq"
+    model_name = "astronomer/Llama-3-8B-Instruct-GPTQ-8-Bit"
     d = InferenceEngine(settings=KaiwaBaseSettings(model=model_name))
     out = asyncio.run(
         d.chat(
             input=ChatCompletionRequest(
                 model=model_name,
-                messages=[{"role": "user", "content": "Hello!"}],
+                messages=[
+                    {
+                        "role": "user",
+                        "content": "What is the remainder when 732^732 is divided by 27?",
+                    }
+                ],
             )
         )
     )
