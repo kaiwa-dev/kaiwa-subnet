@@ -56,7 +56,7 @@ def validator(
         ),
     ] = "casperhansen/llama-3-8b-instruct-awq",
     gpu_memory_utilization: Annotated[float, typer.Option(help="float")] = 0.9,
-    call_timeout: int = 30,
+    call_timeout: int = 60,
     iteration_interval: int = 60,
 ):
     from kaiwa_subnet.validator import Validator, ValidatorSettings

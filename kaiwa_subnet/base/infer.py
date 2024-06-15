@@ -26,6 +26,7 @@ class InferenceEngine(Module):
     def __init__(self, settings: KaiwaBaseSettings) -> None:
         super().__init__()
         engine_args = AsyncEngineArgs(
+            enforce_eager=True,
             model=settings.model,
             dtype="half",
             max_model_len=2048,
