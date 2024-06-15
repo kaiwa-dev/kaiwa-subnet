@@ -35,7 +35,7 @@ class InferenceEngine(Module):
         served_model_names = [engine_args.model]
         response_role = "assistant"
         lora_modules = None
-        chat_template = None
+        chat_template = asyncio.run(self.engine.get_tokenizer()).chat_template
         self.openai_serving_chat = OpenAIServingChat(
             self.engine,
             model_config,
