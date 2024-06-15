@@ -3,7 +3,7 @@ from typing import List
 
 
 class KaiwaBaseSettings(BaseSettings):
-    model: str = "casperhansen/llama-3-8b-instruct-awq"
+    model: str
     gpu_memory_utilization: float = 0.9
     use_testnet: bool = False
     call_timeout: int = 60

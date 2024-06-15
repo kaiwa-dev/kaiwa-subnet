@@ -9,6 +9,8 @@ import typer
 from loguru import logger
 from communex.compat.key import classic_load_key
 
+DEFAULT_MODEL = "neuralmagic/Meta-Llama-3-8B-Instruct-FP8"
+
 cli = typer.Typer()
 
 
@@ -52,12 +54,12 @@ def validator(
     model: Annotated[
         Optional[str],
         typer.Option(
-            help="models to be loaded, separated by comma. default to 'casperhansen/llama-3-8b-instruct-awq' "
+            help=f"models to be loaded, separated by comma. default to '{DEFAULT_MODEL}' "
         ),
-    ] = "casperhansen/llama-3-8b-instruct-awq",
+    ] = DEFAULT_MODEL,
     gpu_memory_utilization: Annotated[float, typer.Option(help="float")] = 0.9,
-    call_timeout: int = 60,
-    iteration_interval: int = 60,
+    call_timeout: int = 120,
+    iteration_interval: int = 300,
 ):
     from kaiwa_subnet.validator import Validator, ValidatorSettings
 
@@ -90,9 +92,9 @@ def miner(
     model: Annotated[
         Optional[str],
         typer.Option(
-            help="models to be loaded, separated by comma. default to 'casperhansen/llama-3-8b-instruct-awq' "
+            help=f"models to be loaded, separated by comma. default to '{DEFAULT_MODEL}' "
         ),
-    ] = "casperhansen/llama-3-8b-instruct-awq",
+    ] = DEFAULT_MODEL,
     gpu_memory_utilization: Annotated[float, typer.Option(help="float")] = 0.9,
 ):
     from kaiwa_subnet.miner import Miner, MinerSettings

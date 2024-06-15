@@ -1,7 +1,3 @@
-import subprocess
-import shlex
-import httpx
-import time
 import asyncio
 
 from communex.module.module import Module, endpoint
@@ -19,7 +15,7 @@ from vllm.entrypoints.openai.protocol import (
 )
 from vllm.entrypoints.openai.serving_chat import OpenAIServingChat
 from vllm.entrypoints.openai.serving_engine import LoRAModulePath
-from .config import KaiwaBaseSettings
+from kaiwa_subnet.base.config import KaiwaBaseSettings
 
 
 class InferenceEngine(Module):
@@ -30,14 +26,14 @@ class InferenceEngine(Module):
             model=settings.model,
             dtype="half",
             max_model_len=2048,
-            quantization="awq",
+            quantization="fp8",
             gpu_memory_utilization=settings.gpu_memory_utilization,
             kv_cache_dtype="fp8",
         )
         self.engine = AsyncLLMEngine.from_engine_args(engine_args)
         model_config = asyncio.run(self.engine.get_model_config())
         served_model_names = [engine_args.model]
-        response_role = ""
+        response_role = "assistant"
         lora_modules = None
         chat_template = None
         self.openai_serving_chat = OpenAIServingChat(
@@ -64,11 +60,14 @@ class InferenceEngine(Module):
 
 
 if __name__ == "__main__":
-    d = InferenceEngine()
-    out = d.chat(
-        request=ChatCompletionRequest(
-            model="casperhansen/llama-3-8b-instruct-awq",
-            messages=[{"role": "user", "content": "Hello!"}],
+    model_name = "neuralmagic/Meta-Llama-3-8B-Instruct-FP8"
+    d = InferenceEngine(settings=KaiwaBaseSettings(model=model_name))
+    out = asyncio.run(
+        d.chat(
+            input=ChatCompletionRequest(
+                model=model_name,
+                messages=[{"role": "user", "content": "Hello!"}],
+            )
         )
     )
     print(out)
