@@ -1,17 +1,19 @@
+import random
 import time
 
 from datasets import load_dataset
-import random
-
-random.seed(int(time.time()))
 
 
 class ValidationDataset:
     def __init__(self) -> None:
-        self.dataset = load_dataset("chenghao/quora_questions")
+        random.seed(int(time.time()))
+        rand = random.randint(0, 1000000)
+        print("random", rand)
+        self.dataset = load_dataset("chenghao/quora_questions").shuffle(seed=rand)
 
     def random_prompt(self) -> str:
         index = random.randint(0, len(self.dataset["train"]))
+        print("rand_index", index)
         return self.dataset["train"][index]["questions"]
 
 
