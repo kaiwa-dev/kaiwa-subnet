@@ -9,7 +9,7 @@ import typer
 from loguru import logger
 from communex.compat.key import classic_load_key
 
-DEFAULT_MODEL = "neuralmagic/Meta-Llama-3-8B-Instruct-FP8"
+DEFAULT_MODEL = "casperhansen/llama-3-8b-instruct-awq"
 
 cli = typer.Typer()
 

@@ -24,11 +24,11 @@ class InferenceEngine(Module):
         engine_args = AsyncEngineArgs(
             enforce_eager=True,
             model=settings.model,
+            tokenizer=settings.model,
             dtype="half",
             max_model_len=2048,
-            quantization="fp8",
+            quantization="awq",
             gpu_memory_utilization=settings.gpu_memory_utilization,
-            kv_cache_dtype="fp8",
         )
         self.engine = AsyncLLMEngine.from_engine_args(engine_args)
         model_config = asyncio.run(self.engine.get_model_config())
@@ -60,7 +60,7 @@ class InferenceEngine(Module):
 
 
 if __name__ == "__main__":
-    model_name = "neuralmagic/Meta-Llama-3-8B-Instruct-FP8"
+    model_name = "casperhansen/llama-3-8b-instruct-awq"
     d = InferenceEngine(settings=KaiwaBaseSettings(model=model_name))
     out = asyncio.run(
         d.chat(
