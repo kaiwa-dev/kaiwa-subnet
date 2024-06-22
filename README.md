@@ -1,6 +1,6 @@
 # Kaiwa Subnet
 
-Kaiwa is a platform that enables developers to easily run AI models on Commune Subnet. Kaiwa provides user-friendly API, allowing users to integrate AI models with minimal coding and flexibility hardware resources.
+KAIWA is a decentralized platform designed to simplify the process of running, fine-tuning, and deploying AI  models. Kaiwa provides user-friendly API, allowing users to integrate AI models with minimal coding and flexibility hardware resources.
 
 ## Why Kaiwa
 
