@@ -7,6 +7,7 @@ Our netuid on commune:
 If you want run it on testnet, add `--testnet` argument after `comx`.
 
 ## Hardware Requirements
+
 * Memory: >= 16GB
 * GPU: >= 16GB VRAM
 * Storage: >= 50GB
@@ -19,6 +20,7 @@ If you want run it on testnet, add `--testnet` argument after `comx`.
 * [comx](https://github.com/agicommies/communex) cli tool for commune key management
 
 ## Register a module
+
 ```
 comx module register <module-name> <key> --netuid=<netuid> --ip=<ip> --port=<port>
 ```
@@ -26,20 +28,25 @@ comx module register <module-name> <key> --netuid=<netuid> --ip=<ip> --port=<por
 IP should be your public ip.
 
 ## Stake (validator required)
+
 ```
 comx balance stake <key> <token-amount> <your_ss58_address> --netuid=<netuid>
 ```
 
 ## Running with Docker (Recommended)
+
 We recommend you to use Docker to run the miner and validator. The deployment in this method can make the services more robust and enable automatic upgrades.
 
 ### Prerequisites
+
 You need to install the following components to meet the requirements for running the kaiwa containers.
-* Docker https://docs.docker.com/engine/install/ubuntu/
+
+* Docker <https://docs.docker.com/engine/install/ubuntu/>
 * NVIDIA GPU Driver
-* NVIDIA container toolkit https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+* NVIDIA container toolkit <https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html>
 
 ### Setup miner with docker
+
 ```bash
 docker run --gpus=all -d --network host --restart always \
 -v $HOME/.commune:/root/.commune \
@@ -48,9 +55,11 @@ docker run --gpus=all -d --network host --restart always \
 kaiwadev/kaiwa-subnet:latest \
 python kaiwa_subnet/cli.py [--testnet] [--log-level=INFO] miner <your_commune_key> <host> <port>
 ```
+
 host should be 0.0.0.0 so it allows all the incoming requests with other ip and for the local testing use 127.0.0.1
 
 ### Setup validator with docker
+
 ```bash
 docker run --gpus=all -d --network host --restart always \
 -v $HOME/.commune:/root/.commune \
@@ -59,9 +68,13 @@ docker run --gpus=all -d --network host --restart always \
 kaiwadev/kaiwa-subnet:latest \
 python kaiwa_subnet/cli.py [--testnet] [--log-level=INFO] validator <your_commune_key>
 ```
+
 host should be 0.0.0.0 so it allows all the incoming requests with other ip and for the local testing use 127.0.0.1
+
 ### Enable auto upgrade
+
 This component will periodically check the latest kaiwa docker image, pull it and restart the running containers with the new image.
+
 ```bash
 docker run -d \
 --name watchtower \
@@ -70,12 +83,14 @@ containrrr/watchtower --interval 300 kaiwa-miner kaiwa-validator
 ```
 
 ## Running with source code
+
 ## Installation
+
 [Install PDM](https://pdm-project.org/en/latest/) if you don't have it.
 
 After that, run the following commands:
 
-```
+```sh
 # clone this project
 git clone https://github.com/kaiwax-org/kaiwa-subnet
 cd kaiwa-subnet
@@ -88,13 +103,22 @@ source .venv/bin/activate
 pdm install
 ```
 
+Alternatively Install Using Pip
+
+Make sure you have Python 3.10 or higher.
+Then run:
+```pip install -r requirements.txt```
+
 ### Miner Setup
+
 ```bash
 python kaiwa_subnet/cli.py [--testnet] [--log-level=INFO] miner <your_commune_key> <host> <port> [--gpu-memory-utilization=0.9]
 ```
+
 host should be `0.0.0.0` so it allows all the incoming requests with other ip and for the local testing use `127.0.0.1`. You should set a reasonable gpu-memory-utilization parameter to meet the running requirements. The valid range for this parameter is from 0 to 1, the default value is 0.9 if not set.
 
 ### Validator Setup
+
 You should set a reasonable gpu-memory-utilization parameter to meet the running requirements. The valid range for this parameter is from 0 to 1, the default value is 0.9 if not set.
 
 ```bash
